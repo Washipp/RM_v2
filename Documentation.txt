@@ -166,3 +166,12 @@ RESERVATION - API:
         'Entity not found' if {id} is not on the server or has not been specified
 
 
+DATABASE:
+    servername: localhost
+    userName: root
+    password: root
+    dbName: rm
+    port: 8889
+
+APACHE:
+    Port: 8080

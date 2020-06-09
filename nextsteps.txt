@@ -1,0 +1,6 @@
+TODO:
+- Password manager
+- Deleting when dependencies exits (eg. User 1 is foreign key for reservation 1,
+  when deleting user1, the constraint fails
+- API authorization
+- 

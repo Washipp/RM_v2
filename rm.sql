@@ -1,0 +1,70 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+CREATE DATABASE IF NOT EXISTS `rm` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `rm`;
+
+CREATE TABLE `reservation` (
+  `id_r` int(11) NOT NULL,
+  `o_id` int(11) DEFAULT NULL,
+  `u_id` int(11) DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `last_edit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `resource` (
+  `id_o` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `last_edit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+  `id_u` int(11) NOT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `last_edit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id_r`),
+  ADD KEY `o_id` (`o_id`),
+  ADD KEY `u_id` (`u_id`);
+
+ALTER TABLE `resource`
+  ADD PRIMARY KEY (`id_o`);
+
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id_u`);
+
+
+ALTER TABLE `reservation`
+  MODIFY `id_r` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `resource`
+  MODIFY `id_o` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `user`
+  MODIFY `id_u` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`o_id`) REFERENCES `resource` (`id_o`),
+  ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `user` (`id_u`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
