@@ -1,0 +1,7 @@
+Options -Indexes -MultiViews +FollowSymLinks
+RewriteEngine On
+
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(?!admin/)(.+)$ /RM_v2/api/index.php [NC,QSA,L]

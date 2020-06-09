@@ -1,0 +1,168 @@
+USER - API:
+    GET (read from database):
+    {url}/api/user --> get all users from database:
+        [
+            {
+                "id": *number*,
+                "firstName": *string*,
+                "lastName": *string*,
+                "email": *string*,
+                "password": null,
+                "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+            },
+            {}  ...
+        ]
+
+    {url}/api/user/{id} --> get the user with {id}:
+        {
+            "id": *number*,
+            "firstName": *string*,
+            "lastName": *string*,
+            "email": *string*,
+            "password": null,
+            "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+        }
+
+        'Entity not found' if the specified user {id} is not on the database
+
+    POST (save user to database):
+    {url}/api/user
+        Body: {
+            "firstName": *string*,
+            "lastName": *string*,
+            "email": *string*,
+            "password": *string*,
+        }
+
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    PUT (update user from database):
+    {url}/api/user/{id}
+        Body: {
+            "firstName": *string*,
+            "lastName": *string*,
+            "email": *string*,
+            "password": *string*,
+        }
+
+        'Entity not found' if {id} is not on the server or has not been specified
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    DELETE (delete user from database):
+    {url}/api/user/{id}
+
+        'Entity not found' if {id} is not on the server or has not been specified
+------------------------------------------------------------------------------------------------
+RESOURCE - API:
+    GET (read from database)
+    {url}/api/resource --> get all resources from the database
+        [
+            {
+                "id": *number*,
+                "name": *string*,
+                "description": *string*,
+                "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+            },
+            {}  ...
+        ]
+
+    {url}/api/resource/{id} --> get resource with {id}:
+        {
+            "id": *number*,
+            "name": *string*,
+            "description": *string*,
+            "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+        }
+
+        'Entity not found' if the specified resource {id} is not on the database
+
+    POST (save resource to database):
+    {url}/api/resource
+        Body: {
+            "name": *string*,
+            "description": *string*
+        }
+
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    PUT (update resource from database):
+    {url}/api/resource/{id}
+        Body: {
+            "name": *string*,
+            "description": *string*
+        }
+
+        'Entity not found' if {id} is not on the database or has not been specified
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    DELETE (delete resource from database):
+    {url}/api/resource/{id}
+
+        'Entity not found' if {id} is not on the server or has not been specified
+------------------------------------------------------------------------------------------------
+RESERVATION - API:
+    GET (read from database)
+    {url}/api/reservation --> get all reservations from the database
+        [
+            {
+                "id": *number*,
+                "userId": *number*,
+                "resourceId": *number*,
+                "comment": *string*,
+                "startDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+                "endDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+                "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+            },
+            {}  ...
+        ]
+    {url}/api/reservation/{id} --> get reservation with {id}
+
+        {
+            "id": *number*,
+            "userId": *number*,
+            "resourceId": *number*,
+            "comment": *string*,
+            "startDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+            "endDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+            "lastEdit": *string* (Format: "YYYY-MM-DD HH:min:sec")
+        }
+
+        'Entity not found' if the specified reservation {id} is not on the database
+
+    POST (save reservation to database)
+    {url}/api/reservation
+        Body: {
+            "userId": *number*,
+            "resourceId": *number*,
+            "comment": *string*,
+            "startDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+            "endDate": *string* (Format: "YYYY-MM-DD HH:min:sec")
+        }
+
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    PUT (update reservation from database):
+    {url}/api/reservation/{id}
+        Body: {
+            "userId": *number*,
+            "resourceId": *number*,
+            "comment": *string*,
+            "startDate": *string* (Format: "YYYY-MM-DD HH:min:sec"),
+            "endDate": *string* (Format: "YYYY-MM-DD HH:min:sec")
+        }
+
+        'Entity not found' if {id} is not on the database or has not been specified
+        'Invalid input' if "id" or "lastEdit" is set
+        'invalid input' if the required fields are not filled (null or missing)
+
+    DELETE (delete reservation from database):
+    {url}/api/reservation/{id}
+
+        'Entity not found' if {id} is not on the server or has not been specified
+
+
