@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class APIRequestController
+ *
+ * This class handles a single API Request with the given constructor inputs.
+ */
 class APIRequestController {
   private $id;
   private $requestMethod;
@@ -7,11 +12,11 @@ class APIRequestController {
 
   /**
    * APIRequestController constructor.
-   * @param $id
-   * @param $requestMethod
-   * @param $responseGenerator
+   * @param $id int is optional, can be null
+   * @param $requestMethod string either PUT, GET, DELETE, POST
+   * @param $responseGenerator ResponseGenerator Interface to the Database class
    */
-  public function __construct($id, $requestMethod, ResponseGenerator $responseGenerator) {
+  public function __construct($id, string $requestMethod, ResponseGenerator $responseGenerator) {
     $this->id = $id;
     $this->requestMethod = $requestMethod;
     $this->responseGenerator = $responseGenerator;
@@ -20,20 +25,25 @@ class APIRequestController {
   public function processRequest() {
     switch ($this->requestMethod) {
       case 'GET':
-        if ($this->id) {
-          $response = $this->get($this->id);
+        if ($this->id) { //evaluates to true if it is set
+          $response = $this->getById();
         } else {
+
           $response = $this->getAll();
         };
         break;
       case 'POST':
-        $response = $this->createFromRequest();
+        $response = $this->createNewEntity();
         break;
       case 'PUT':
-        $response = $this->updateFromRequest($this->id);
+        $response = $this->updateById();
         break;
       case 'DELETE':
-        $response = $this->delete($this->id);
+        $response = $this->deleteById();
+        break;
+      case 'OPTIONS': // we have to handle OPTIONS request and return 200 for some browsers to work
+        //TODO: Handle OPTIONS Request correctly
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
         break;
       default:
         $response = $this->notFoundResponse();
@@ -45,10 +55,10 @@ class APIRequestController {
     }
   }
 
-  private function get($id) {
-    $result = $this->responseGenerator->get($id);
+  private function getById() {
+    $result = $this->responseGenerator->get($this->id);
 
-    if (! $result) {
+    if (!$result) {
       return $this->notFoundResponse();
     }
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -58,7 +68,7 @@ class APIRequestController {
 
   private function getAll() {
     $resultArray = $this->responseGenerator->getAll();
-    if (! $resultArray) {
+    if (!$resultArray) {
       return $this->notFoundResponse();
     }
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -69,10 +79,10 @@ class APIRequestController {
     return $response;
   }
 
-  private function createFromRequest() {
+  private function createNewEntity() {
     $input = (array) json_decode(file_get_contents('php://input'));
 
-    if (! $this->validate($input)) {
+    if (!$this->validate($input)) {
       return $this->unprocessableEntityResponse();
     }
     $this->responseGenerator->createNew($input);
@@ -84,8 +94,8 @@ class APIRequestController {
     return $response;
   }
 
-  private function updateFromRequest($id) {
-    $result = $this->responseGenerator->get($id);
+  private function updateById() {
+    $result = $this->responseGenerator->get($this->id);
     if (!$result || !$result->getId() ) {
       return $this->notFoundResponse();
     }
@@ -94,7 +104,7 @@ class APIRequestController {
     if (! $this->validate($input)) {
       return $this->unprocessableEntityResponse();
     }
-    $this->responseGenerator->update($id, $input);
+    $this->responseGenerator->update($this->id, $input);
     $response['status_code_header'] = 'HTTP/1.1 200 OK';
     $response['body'] = json_encode([
        'success' => 'Successfully updated'
@@ -106,12 +116,12 @@ class APIRequestController {
     return $this->responseGenerator->validate($input);
   }
 
-  private function delete($id) {
-    $result = $this->responseGenerator->get($id);
+  private function deleteById() {
+    $result = $this->responseGenerator->get($this->id);
     if (! $result) {
       return $this->notFoundResponse();
     }
-    if(!$this->responseGenerator->delete($id)) {
+    if(!$this->responseGenerator->delete($this->id)) {
       return $this->databaseErrorResponse();
     }
     $response['status_code_header'] = 'HTTP/1.1 200 OK';

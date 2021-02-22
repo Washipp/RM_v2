@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Class ResponseGenerator
+ *
+ * This class is used as a interface to perform CRUD Operations on the Database.
+ * The provided Objects in the constructor specify which database is going to be used.
+ */
 class ResponseGenerator {
 
   private $dbTable;
@@ -8,8 +13,8 @@ class ResponseGenerator {
 
   /**
    * UserController constructor.
-   * @param DatabaseObject $dbTable
-   * @param DatabaseEntity $dbEntity
+   * @param DatabaseObject $dbTable used to specify which Database is going to be used.
+   * @param DatabaseEntity $dbEntity Object that is mapped into the database.
    */
   public function __construct(DatabaseObject $dbTable, DatabaseEntity $dbEntity) {
     $this->dbTable = $dbTable;
